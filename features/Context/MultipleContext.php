@@ -1,5 +1,5 @@
 <?php
-namespace Sil\IdpPw\PasswordStore\Google\Behat\Context;
+namespace Sil\IdpPw\PasswordStore\Multiple\Behat\Context;
 
 use Behat\Behat\Context\Context;
 use Exception;
