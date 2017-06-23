@@ -3,7 +3,9 @@ namespace Sil\IdpPw\PasswordStore\Multiple;
 
 use Exception;
 use InvalidArgumentException;
+use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
+use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\PasswordStore\Multiple\Exception\NotAttemptedException;
 use yii\base\Component;
@@ -67,11 +69,41 @@ class Multiple extends Component implements PasswordStoreInterface
         }
     }
     
+    /**
+     * Get metadata about user's password, including its expiration date and
+     * when it was last changed.
+     *
+     * NOTE: This will simply pass along the request to the first password store
+     *       defined in its list.
+     *
+     * @param string $employeeId The Employee ID of the user.
+     * @return UserPasswordMeta
+     * @throw UserNotFoundException
+     * @throw AccountLockedException
+     */
     public function getMeta($employeeId): UserPasswordMeta
     {
         return $this->passwordStores[0]->getMeta($employeeId);
     }
-
+    
+    /**
+     * See if all of the password stores seem to be available/responding, and if
+     * so set the user's password in all of the defined password stores. If any
+     * of the password stores fail the "pre-check", this will not attempt to set
+     * the user's password on any of them, instead throwing a
+     * NotAttemptedException.
+     *
+     * NOTE: If successful, this will return the UserPasswordMeta returned by
+     *       the first password store defined in its list.
+     *
+     * @param string $employeeId The Employee ID of the user.
+     * @param string $password The new password.
+     * @return UserPasswordMeta
+     * @throws NotAttemptedException
+     * @throws Exception
+     * @throw UserNotFoundException
+     * @throw AccountLockedException
+     */
     public function set($employeeId, $password): UserPasswordMeta
     {
         $this->assertAllBackendsAreAvailable($employeeId, 'set the password');
