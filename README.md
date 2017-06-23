@@ -39,3 +39,8 @@ value of the first password stores' call will be returned to you.
 When you call `getMeta(...)` on this `Multiple` class, it will only call 
 `getMeta(...)` on the first password store in the list, returning it's resposne 
 to you.
+
+## Features
+
+For more information about this password store's features, see the 
+`features/multiple.feature` file.
