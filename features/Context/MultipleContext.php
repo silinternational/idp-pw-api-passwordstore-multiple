@@ -151,7 +151,7 @@ class MultipleContext implements Context
     /**
      * @Given password store :pwStoreNumber will fail our status precheck
      */
-    public function passwordStoreWillFailedOurStatusPrecheck($pwStoreNumber)
+    public function passwordStoreWillFailOurStatusPrecheck($pwStoreNumber)
     {
         $this->passwordStoresConfig[$pwStoreNumber]['isOnline'] = false;
     }
