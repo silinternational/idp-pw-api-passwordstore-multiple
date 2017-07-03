@@ -1,0 +1,9 @@
+*.aes
+codeship.env
+.idea/
+local.env
+*.local.*
+nbproject/
+*.p12
+.vagrant/
+vendor/

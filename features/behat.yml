@@ -1,0 +1,5 @@
+default:
+    suites:
+        multiple:
+            paths:    [ %paths.base%/../features/multiple.feature ]
+            contexts: [ Sil\IdpPw\PasswordStore\Multiple\Behat\Context\MultipleContext ]
