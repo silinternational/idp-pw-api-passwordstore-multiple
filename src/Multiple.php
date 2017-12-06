@@ -5,6 +5,7 @@ use Exception;
 use InvalidArgumentException;
 use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
+use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\PasswordStore\Multiple\Exception\NotAttemptedException;
@@ -101,8 +102,9 @@ class Multiple extends Component implements PasswordStoreInterface
      * @return UserPasswordMeta
      * @throws NotAttemptedException
      * @throws Exception
-     * @throw UserNotFoundException
-     * @throw AccountLockedException
+     * @throws UserNotFoundException
+     * @throws AccountLockedException
+     * @throws PasswordReuseException
      */
     public function set($employeeId, $password): UserPasswordMeta
     {
@@ -114,6 +116,11 @@ class Multiple extends Component implements PasswordStoreInterface
                 $responses[] = $passwordStore->set($employeeId, $password);
                 $numSuccessfullySet++;
             } catch (Exception $e) {
+                if ($e instanceof PasswordReuseException) {
+                    // Be aware that this does not include information about how many backends the password
+                    // was successfully changed in
+                    throw $e;
+                }
                 throw new Exception(sprintf(
                     'Failed to set the password using %s after successfully '
                     . 'setting it in %s other password store(s). Error: %s',
