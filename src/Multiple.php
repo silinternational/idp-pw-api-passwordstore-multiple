@@ -117,6 +117,8 @@ class Multiple extends Component implements PasswordStoreInterface
                 $numSuccessfullySet++;
             } catch (Exception $e) {
                 if ($e instanceof PasswordReuseException) {
+                    // Be aware that this does not include information about how many backends the password
+                    // was successfully changed in
                     throw $e;
                 }
                 throw new Exception(sprintf(
