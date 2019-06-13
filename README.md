@@ -1,3 +1,6 @@
+*This repository is no longer maintained. It has been incorporated
+into [idp-pw-api](https://github.com/silinternational/idp-pw-api).*
+
 # idp-pw-api-passwordstore-multiple
 Password store component for IdP PW API for using multiple backends.
 
